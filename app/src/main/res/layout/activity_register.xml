@@ -89,10 +89,11 @@
                 android:textStyle="bold"/>
 
             <EditText
+                android:id="@+id/edittext_email_login"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="textEmailAddress"
-                android:drawableEnd="@drawable/done_icon"/>
+                android:drawableEnd="@drawable/done_icon"
+                android:inputType="textEmailAddress" />
 
             <View
                 android:layout_width="wrap_content"
@@ -106,10 +107,11 @@
                 android:textStyle="bold"/>
 
             <EditText
+                android:id="@+id/edittext_password_reg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:drawableEnd="@drawable/password_icon"/>
+                android:drawableEnd="@drawable/password_icon"
+                android:inputType="textPassword" />
 
 
             <RelativeLayout
@@ -136,8 +138,10 @@
                 android:layout_height="10dp"/>
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/register_button"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:onClick="registerAccount"
                 android:text="Register"
                 android:textColor="@color/white"
                 app:cornerRadius="32dp">
