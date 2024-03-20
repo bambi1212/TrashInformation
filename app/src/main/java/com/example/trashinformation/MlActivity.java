@@ -1,6 +1,8 @@
 package com.example.trashinformation;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
@@ -120,8 +122,10 @@ public class MlActivity extends AppCompatActivity {
                 }
             }
         });
+        checkSdkGalary();
 
     }
+
 
 
     public void speak(View view) {
@@ -188,6 +192,15 @@ public class MlActivity extends AppCompatActivity {
             startActivity(new Intent(MlActivity.this, LoginActivity.class));
             finish(); //so he cant press back button and come to here from login
 
+        }
+        public void checkSdkGalary(){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    // Permission not granted, request it
+                    requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+                }
+            }
         }
 
 
