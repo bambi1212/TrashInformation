@@ -2,7 +2,10 @@ package com.example.trashinformation;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -24,12 +27,14 @@ import com.google.mlkit.vision.label.ImageLabeler;
 import com.google.mlkit.vision.label.ImageLabeling;
 import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
+import java.util.Locale;
 
 public class MlActivity extends AppCompatActivity {
 
@@ -38,6 +43,9 @@ public class MlActivity extends AppCompatActivity {
     private TextView failOrNot; // just for check
     private ImageLabeler labeler;
     private InputImage imageToProcces;
+
+    private TextToSpeech mTTS;
+
 
 
     @Override
@@ -91,8 +99,38 @@ public class MlActivity extends AppCompatActivity {
                         failOrNot.setText("fail :(");
 
                     }
+
                 });
 
+
+        Button mButtonSpeak= findViewById(R.id.mButtonSpeak);
+        mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) { //enable play button
+                if (status == TextToSpeech.SUCCESS) {
+                    int result = mTTS.setLanguage(Locale.UK);
+
+                    if (result == TextToSpeech.LANG_MISSING_DATA
+                            || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        Log.e("TTS", "language not supported");
+                    } else {
+                        mButtonSpeak.setEnabled(true);
+                    }
+
+                }
+            }
+        });
+
+    }
+
+
+    public void speak(View view) {
+
+
+
+        mTTS.setPitch(0.5f);
+        mTTS.setSpeechRate(0.5f);
+        mTTS.speak(outputTextView.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
 
 
     }
@@ -151,5 +189,9 @@ public class MlActivity extends AppCompatActivity {
             finish(); //so he cant press back button and come to here from login
 
         }
+
+
+
+
 
     }
