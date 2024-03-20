@@ -12,7 +12,6 @@
         <item name="colorOnSecondary">@color/my_secondary</item>
 
 
-        <item name="android:statusBarColor">@color/my_primary</item>
 
     </style>
 
