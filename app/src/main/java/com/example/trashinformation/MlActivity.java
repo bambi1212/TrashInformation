@@ -2,8 +2,11 @@ package com.example.trashinformation;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.ImageDecoder;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
@@ -12,11 +15,10 @@ import android.widget.TextView;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -30,11 +32,9 @@ import com.google.mlkit.vision.label.ImageLabeling;
 import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions;
 
 
-import androidx.appcompat.app.AppCompatActivity;
-
-
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -47,6 +47,11 @@ public class MlActivity extends AppCompatActivity {
     private InputImage imageToProcces;
 
     private TextToSpeech mTTS;
+
+    private ImageView inputImageGalaryView;
+
+    private int REQUEST_PICK_IMAGE =1000;
+
 
 
 
@@ -211,6 +216,61 @@ public class MlActivity extends AppCompatActivity {
                 }
             }
         }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        Log.d(MlActivity.class.getSimpleName(),"grant result for"+ permissions[0] +"is granted"+ grantResults[0]);
+    }
+
+    public void onPickImage(View view){
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+
+        startActivityForResult(intent, REQUEST_PICK_IMAGE);
+    }
+    public void onStartCamera(View view){
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK)
+            if(requestCode == REQUEST_PICK_IMAGE){
+                Uri uri = data.getData();
+                Bitmap bitmap = loadFromUri(uri);
+                inputImageGalaryView.setImageBitmap(bitmap);
+
+
+               // ImageView imageViewXml = findViewById(R.id.inputImageViewGalaryi);
+             //   imageViewXml.setImageBitmap(bitmap);
+
+
+                //runClassification(bitmap);
+            }
+    }
+
+    private Bitmap loadFromUri(Uri uri){
+        Bitmap bitmap = null;
+
+        try{
+            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1){
+                ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), uri);
+                bitmap = ImageDecoder.decodeBitmap(source);
+            }
+            else{
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+            }
+
+
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+        return bitmap;
+    }
 
 
 
