@@ -126,6 +126,15 @@ public class MlActivity extends AppCompatActivity {
 
     }
 
+    /*
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        Log.d(imageHelperActivity.class.getSimpleName(),"grant result for"+ permissions[0] +"is granted"+ grantResults[0]);
+    }
+
+     */
 
 
     public void speak(View view) {
