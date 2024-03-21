@@ -1,21 +1,21 @@
 package com.example.trashinformation;
 
-
 public class User {
     private String name;
 
     public User(String name){
-        this.name= name;
+        this.name = name;
     }
 
     public User(){
 
     }
-    public String GetName(){
+
+    public String getName(){
         return name;
     }
-    public void SetName(String name){
-        this.name=name;
-    }
 
+    public void setName(String name){
+        this.name = name;
+    }
 }

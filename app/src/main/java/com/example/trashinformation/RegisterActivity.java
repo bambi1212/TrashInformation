@@ -125,11 +125,10 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void saveName(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef= database.getReference("name");
-            myRef.setValue(name.getText().toString());
-
-
+        DatabaseReference myRef= database.getReference("user"+mAuth.getInstance().getUid());
+        User user =new User(name.getText().toString());
+            //myRef.setValue(name.getText().toString());
+        myRef.setValue(user);
 
     }
-
     }
