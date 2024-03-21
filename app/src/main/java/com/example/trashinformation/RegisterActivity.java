@@ -26,10 +26,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterActivity extends AppCompatActivity {
     protected FirebaseAuth mAuth; //he is protected so i can use in register
 
+    //ActivityReadDataBinding a;
+
+    EditText name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
         EdgeToEdge.enable(this); //for noti maybe need to check
         setContentView(R.layout.activity_register);
         mAuth = FirebaseAuth.getInstance();
+        name = findViewById (R.id.choseNickName_editText);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(RegisterActivity.this, android.Manifest.permission.POST_NOTIFICATIONS)
@@ -51,19 +57,26 @@ public class RegisterActivity extends AppCompatActivity {
         EditText emailText = findViewById(R.id.edittext_email_login);
         EditText passwordText = findViewById(R.id. edittext_password_reg);
 
-        mAuth.createUserWithEmailAndPassword(emailText.getText().toString(), passwordText.getText().toString())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) { //if register work move to welcome
-                            notificationStart(); //ty for saving Eart notification
-                            startActivity(new Intent(RegisterActivity.this, MlActivity.class));
-                        } else
-                        {
-                            Toast.makeText(RegisterActivity.this, "register failed",Toast.LENGTH_LONG).show();
+
+        if(name.getText().toString().isEmpty()) {
+            Toast.makeText(this, "failed to register need to enter name", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            mAuth.createUserWithEmailAndPassword(emailText.getText().toString(), passwordText.getText().toString())
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+
+                            if (task.isSuccessful()) { //if register work move to welcome
+                                notificationStart(); //ty for saving Eart notification
+                                saveName();
+                                startActivity(new Intent(RegisterActivity.this, MlActivity.class));
+                            } else {
+                                Toast.makeText(RegisterActivity.this, "register failed", Toast.LENGTH_LONG).show();
+                            }
                         }
-                    }
-                });
+                    });
+        }
     }
 
     public void moveToLoginActivity(View v){
@@ -108,6 +121,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         }
         notificationManager.notify(0,mbuilder.build());
+    }
+
+    public void saveName(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef= database.getReference("name");
+        myRef.setValue(name.getText().toString());
     }
 
     }
