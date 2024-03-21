@@ -61,6 +61,9 @@ public class MlActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ml);
         defineLocalModelAndViews();
 
+
+        inputImageGalaryView = findViewById(R.id.inputImageViewGalaryi);
+
         labeler.process(imageToProcces)
                 .addOnSuccessListener(new OnSuccessListener<List<ImageLabel>>() {
                                           @Override
@@ -244,8 +247,12 @@ public class MlActivity extends AppCompatActivity {
                 inputImageGalaryView.setImageBitmap(bitmap);
 
 
-               // ImageView imageViewXml = findViewById(R.id.inputImageViewGalaryi);
-             //   imageViewXml.setImageBitmap(bitmap);
+
+                ImageView imageViewXml = findViewById(R.id.inputImageViewGalaryi);
+                imageViewXml.setImageBitmap(bitmap);
+
+                //ImageView imageViewXml = findViewById(R.id.inputImageViewGalaryi);
+                //imageViewXml.setImageBitmap(bitmap);
 
 
                 //runClassification(bitmap);
