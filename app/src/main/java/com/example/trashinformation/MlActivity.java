@@ -16,6 +16,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +24,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.mlkit.common.model.LocalModel;
 import com.google.mlkit.vision.common.InputImage;
 //import com.google.mlkit.vision.common.NormalizationOptions;
@@ -40,6 +46,8 @@ import java.util.Locale;
 
 public class MlActivity extends AppCompatActivity {
 
+
+    protected FirebaseAuth mAuth; //he is protected so i can use in register
 
     private TextView outputTextView;
     private TextView failOrNot; // just for check
@@ -60,6 +68,8 @@ public class MlActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ml);
         defineLocalModelAndViews();
+        displayUserName();
+        mAuth = FirebaseAuth.getInstance();
 
 
         inputImageGalaryView = findViewById(R.id.inputImageViewGalaryi);
@@ -279,6 +289,25 @@ public class MlActivity extends AppCompatActivity {
         }
 
         return bitmap;
+    }
+    private void displayUserName(){
+        TextView name = findViewById(R.id.userNameDisplay);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://trashinformation-96d96-default-rtdb.firebaseio.com/");
+        DatabaseReference myRef= database.getReference("name");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) { //snapshot have all the data that change
+                String nameFromDataBase = snapshot.getValue(String.class);
+                name.setText("name:"+nameFromDataBase);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(MlActivity.this, "eror reading", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
 

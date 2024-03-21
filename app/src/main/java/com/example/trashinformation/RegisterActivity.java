@@ -69,7 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             if (task.isSuccessful()) { //if register work move to welcome
                                 notificationStart(); //ty for saving Eart notification
-                                saveName();
+                                setUser();
                                 startActivity(new Intent(RegisterActivity.this, MlActivity.class));
                             } else {
                                 Toast.makeText(RegisterActivity.this, "register failed", Toast.LENGTH_LONG).show();
@@ -123,12 +123,14 @@ public class RegisterActivity extends AppCompatActivity {
         notificationManager.notify(0,mbuilder.build());
     }
 
-    public void saveName(){
+    public void setUser(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef= database.getReference("user"+mAuth.getInstance().getUid());
         User user =new User(name.getText().toString());
             //myRef.setValue(name.getText().toString());
         myRef.setValue(user);
+
+
 
     }
     }
