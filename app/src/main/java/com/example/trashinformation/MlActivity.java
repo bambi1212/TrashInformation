@@ -104,7 +104,6 @@ public class MlActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                         // Task failed with an exception
                         // ...
-                        //outputTextView.setText("FAILED");
                         e.printStackTrace();
                         failOrNot.setText("fail :(");
 
@@ -183,6 +182,9 @@ public class MlActivity extends AppCompatActivity {
         Resources resources = getResources();
         int drawableId = R.drawable.juice_image;
         Bitmap bitmap = BitmapFactory.decodeResource(resources, drawableId);
+
+
+
 
         /*
         NormalizationOptions Normalioptions =
