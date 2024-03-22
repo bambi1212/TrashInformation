@@ -131,6 +131,17 @@ public class RegisterActivity extends AppCompatActivity {
         myRef.setValue(user);
 
 
+        // Write a message to the database
+         database = FirebaseDatabase.getInstance();
+         myRef = database.getReference("name");
+
+        myRef.setValue(name.getText().toString());
+
+        myRef = database.getReference("score");
+
+        myRef.setValue(0);
+
+
 
     }
     }

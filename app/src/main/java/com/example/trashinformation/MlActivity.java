@@ -1,5 +1,7 @@
 package com.example.trashinformation;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.ImageDecoder;
@@ -68,7 +70,7 @@ public class MlActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ml);
         defineLocalModelAndViews();
-        displayUserName();
+        displayUserNameFromFireBase();
         mAuth = FirebaseAuth.getInstance();
 
 
@@ -290,28 +292,82 @@ public class MlActivity extends AppCompatActivity {
 
         return bitmap;
     }
-    private void displayUserName(){
-        TextView name = findViewById(R.id.userNameDisplay);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://trashinformation-96d96-default-rtdb.firebaseio.com/");
-        DatabaseReference myRef= database.getReference("name");
+
+
+    private void displayUserNameFromFireBase() {
+        TextView name = findViewById(R.id.userNameDisplay);
+        /*
+        Log.d(name.getText().toString(), "name first");
+        mAuth = FirebaseAuth.getInstance();
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://trashinformation-96d96-default-rtdb.firebaseio.com");
+        DatabaseReference myRef= database.getReference();
+
+        //name.setText("name:" + mAuth.getCurrentUser().getDisplayName().toString());
+
+
+
         myRef.addValueEventListener(new ValueEventListener() {
+
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) { //snapshot have all the data that change
-                String nameFromDataBase = snapshot.getValue(String.class);
-                name.setText("name:"+nameFromDataBase);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
+                    String uidFromDatabase = itemSnapshot.getKey(); // Assuming UID is the key
+                    Log.d("XXXXXXXX","uidFromDatabase = " + uidFromDatabase.toString());
+                    Log.d("XXXXXXXX1","uidFromDatabase.equals(mAuth.getCurrentUser().getUid()) = " +
+                            uidFromDatabase.equals("user"+mAuth.getCurrentUser().getUid()));
+                    Log.d("XXXXXXXX2","(mAuth.getCurrentUser().getUid()) = " +
+                            "user"+mAuth.getCurrentUser().getUid().toString());
+
+
+                    if(uidFromDatabase != null && uidFromDatabase.equals("user"+mAuth.getCurrentUser().getUid())) {
+                        String nameFromDataBase = itemSnapshot.getValue(String.class);
+                        name.setText("name: " + nameFromDataBase);
+                        Log.d(name.getText().toString(), "name seconed");
+                        Log.d(uidFromDatabase.toString(), "uid");
+                        Log.d(mAuth.getCurrentUser().getUid().toString(), "current user uid");
+
+                        return; // Exit the method once the name is found
+                    }
+                }
+                // If the UID doesn't match any value in the database
+               // name.setText("Name not found");
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(MlActivity.this, "eror reading", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MlActivity.this, "Failed to display name", Toast.LENGTH_SHORT).show();
             }
         });
 
+             */
+            // Read from the database
+        // Write a message to the database
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("name");
+
+
+            myRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    String value = dataSnapshot.getValue(String.class);
+                    Log.d(TAG, "Value is: " + value);
+                    name.setText("name"+value);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    Log.w(TAG, "Failed to read value.", error.toException());
+                }
+            });
+
+
     }
 
 
 
-
-
-    }
+}

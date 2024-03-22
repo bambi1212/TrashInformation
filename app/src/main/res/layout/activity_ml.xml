@@ -5,7 +5,16 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/login_background"
     tools:context=".MlActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/my_primary"
+        android:alpha="0.7"/>
+
 
     <!-- Buttons -->
     <Button
@@ -70,7 +79,7 @@
         android:layout_marginTop="16dp" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/image_exist"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Image Exist"
@@ -88,7 +97,7 @@
         android:text="On Success"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView"
+        app:layout_constraintTop_toBottomOf="@id/image_exist"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp" />
