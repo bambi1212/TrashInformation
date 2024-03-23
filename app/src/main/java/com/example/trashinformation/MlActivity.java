@@ -48,6 +48,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -110,14 +111,18 @@ public class MlActivity extends AppCompatActivity {
     private void displayUserNameFromFirebase() {
         TextView name = findViewById(R.id.userNameDisplay);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("name");
+        DatabaseReference myRef = database.getReference("users");
+
+        //final ArrayList<User>users = new ArrayList<>();
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String value = dataSnapshot.getValue(String.class);
-                Log.d(TAG, "Value is: " + value);
-                name.setText("name is : " + value);
+            public void onDataChange(DataSnapshot Snapshot) {
+                for(DataSnapshot dataSnapshot:Snapshot.getChildren()){
+                    User current = dataSnapshot.getValue(User.class);
+                    name.setText("name is : " + current.getName());
+                }
+
             }
 
             @Override

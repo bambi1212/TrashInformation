@@ -125,21 +125,14 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void setUser(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef= database.getReference("user"+mAuth.getInstance().getUid());
+        DatabaseReference myRef= database.getReference("users/"+mAuth.getInstance().getUid());
         User user =new User(name.getText().toString());
             //myRef.setValue(name.getText().toString());
         myRef.setValue(user);
 
 
         // Write a message to the database
-         database = FirebaseDatabase.getInstance();
-         myRef = database.getReference("name");
 
-        myRef.setValue(name.getText().toString());
-
-        myRef = database.getReference("score");
-
-        myRef.setValue(0);
 
 
 
