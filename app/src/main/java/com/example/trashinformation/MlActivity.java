@@ -110,6 +110,7 @@ public class MlActivity extends AppCompatActivity {
 
     private void displayUserNameFromFirebase() {
         TextView name = findViewById(R.id.userNameDisplay);
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("users");
 
@@ -251,5 +252,11 @@ public class MlActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return bitmap;
+    }
+
+    public void movetoscoreboard(View v) {
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(MlActivity.this, ScoreBoard.class));
+
     }
 }

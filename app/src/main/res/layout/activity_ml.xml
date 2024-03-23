@@ -9,17 +9,33 @@
     tools:context=".MlActivity">
 
 
+    <!-- Buttons -->
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:alpha="0.7"
         android:background="@color/my_primary"
-        android:alpha="0.7">
+        tools:layout_editor_absoluteX="106dp"
+        tools:layout_editor_absoluteY="0dp">
 
+
+        <Button
+            android:id="@+id/movetoscore"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="320dp"
+            android:layout_marginBottom="102dp"
+            android:onClick="movetoscoreboard"
+            android:text="movetoscore" />
 
     </RelativeLayout>
 
-
-    <!-- Buttons -->
     <Button
         android:id="@+id/logout"
         android:layout_width="wrap_content"

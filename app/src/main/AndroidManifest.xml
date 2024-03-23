@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -14,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TrashInformation"
         tools:targetApi="31">
+        <activity
+            android:name=".ScoreBoard"
+            android:exported="false" />
         <activity
             android:name=".NotificationActivity"
             android:exported="false" />
@@ -32,17 +36,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+
         <provider
-            android:authorities="com.iago.fileprovider"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="com.iago.fileprovider"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/fileprovider"/>
+                android:resource="@xml/fileprovider" />
         </provider>
-
-        
     </application>
 
 </manifest>

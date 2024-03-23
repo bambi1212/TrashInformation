@@ -9,8 +9,12 @@ public class User {
         this.score = 0;
     }
 
-    public User(){
+    public User(String name , int score){
+        this.name = name;
+        this.score = score;
 
+    }
+    public User(){
     }
 
     public int getScore(){  // Changed the return type to int
