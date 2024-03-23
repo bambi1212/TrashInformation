@@ -88,7 +88,7 @@ public class MlActivity extends AppCompatActivity {
         int drawableId = R.drawable.juice_image;
         Bitmap bitmap = BitmapFactory.decodeResource(resources, drawableId);
         imageToProcess = InputImage.fromBitmap(bitmap, 0);
-
+        runClassification(bitmap);
         inputImageGalleryView = findViewById(R.id.inputImageViewGalaryi);
         inputImageGalleryView.setImageBitmap(imageToProcess.getBitmapInternal());
 
@@ -104,7 +104,7 @@ public class MlActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String value = dataSnapshot.getValue(String.class);
                 Log.d(TAG, "Value is: " + value);
-                name.setText("name" + value);
+                name.setText("name is : " + value);
             }
 
             @Override
