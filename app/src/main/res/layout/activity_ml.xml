@@ -91,7 +91,7 @@
         android:layout_marginTop="16dp" />
 
     <TextView
-        android:id="@+id/onsucces"
+        android:id="@+id/onsuccess"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="On Success"
@@ -110,7 +110,7 @@
         android:text="name:"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/onsucces" />
+        app:layout_constraintTop_toBottomOf="@id/onsuccess" />
 
     <!-- Button for picking image from gallery -->
     <Button
