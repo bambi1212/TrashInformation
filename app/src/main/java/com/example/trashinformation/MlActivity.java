@@ -5,9 +5,11 @@ import static android.content.ContentValues.TAG;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.ImageDecoder;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,7 +45,10 @@ import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -56,6 +62,11 @@ public class MlActivity extends AppCompatActivity {
     private TextToSpeech mTTS;
     private ImageView inputImageGalleryView;
     private int REQUEST_PICK_IMAGE = 1000;
+
+    private int REQUEST_CAPTURE_IMAGE = 1001;
+
+
+    private File photoFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +100,9 @@ public class MlActivity extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeResource(resources, drawableId);
         imageToProcess = InputImage.fromBitmap(bitmap, 0);
         runClassification(bitmap);
-        inputImageGalleryView = findViewById(R.id.inputImageViewGalaryi);
+
+
+        inputImageGalleryView = findViewById(R.id.image_trash);
         inputImageGalleryView.setImageBitmap(imageToProcess.getBitmapInternal());
 
     }
@@ -154,8 +167,8 @@ public class MlActivity extends AppCompatActivity {
     }
 
     public void speak(View view) {
-        mTTS.setPitch(0.5f);
-        mTTS.setSpeechRate(0.5f);
+        mTTS.setPitch(0.5f); //quality of sound
+        mTTS.setSpeechRate(0.5f); //speed of sound
         mTTS.speak(outputTextView.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
     }
 
@@ -177,16 +190,46 @@ public class MlActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_PICK_IMAGE);
     }
 
-    public void onStartCamera(View view) {}
+    public void onStartCamera(View view) {
+        //create a file to share with camera
+        photoFile = createPhotoFile();
+        Uri fileUri = FileProvider.getUriForFile(this, "com.iago.fileprovider",photoFile);
+
+        //create an intent
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT , fileUri);
+
+        //start activity for result
+        startActivityForResult(intent,REQUEST_CAPTURE_IMAGE);
+    }
+
+    private File createPhotoFile(){
+        File photoFileDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),"Trash_Pictures");
+        if(!photoFileDir.exists()){
+            photoFileDir.mkdir();
+        }
+        String FileName =  new SimpleDateFormat("yyyyMMdd_HHmm").format(new Date());
+        File file = new File(photoFileDir.getPath() + File.separator + FileName);
+        return file;
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == REQUEST_PICK_IMAGE) {
+        if (resultCode == RESULT_OK)  {
+            if( requestCode == REQUEST_PICK_IMAGE){
             Uri uri = data.getData();
             Bitmap bitmap = loadFromUri(uri);
             inputImageGalleryView.setImageBitmap(bitmap);
             runClassification(bitmap);
+        }else if(requestCode == REQUEST_CAPTURE_IMAGE){
+                Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                Matrix matrix = new Matrix();
+                matrix.postRotate(90);
+                Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                inputImageGalleryView.setImageBitmap(rotatedBitmap);
+                runClassification(bitmap);
+        }
         }
     }
 
