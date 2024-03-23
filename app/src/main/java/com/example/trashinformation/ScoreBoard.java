@@ -1,7 +1,9 @@
 package com.example.trashinformation;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -42,7 +44,7 @@ public class ScoreBoard extends AppCompatActivity {
         final ArrayList<User> users = new ArrayList<>();
         final UserAdapter adapter = new UserAdapter(users);
         recyclerView.setAdapter(adapter);
-        Query myQuery = database.getReference("users").orderByChild("score");//.equalTo(0);//.limitToLast(5);
+        Query myQuery = database.getReference("users").orderByChild("score").limitToLast(5);
 
         myQuery.addValueEventListener(new ValueEventListener() {
             @Override
@@ -65,5 +67,10 @@ public class ScoreBoard extends AppCompatActivity {
                 Toast.makeText(ScoreBoard.this, "Error reading", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    public void moveToMlActivity(View v){
+        startActivity(new Intent(this, MlActivity.class));
+
+
     }
 }
