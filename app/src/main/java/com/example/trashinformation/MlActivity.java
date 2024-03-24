@@ -51,6 +51,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MlActivity extends AppCompatActivity {
 
@@ -59,7 +60,7 @@ public class MlActivity extends AppCompatActivity {
     private TextView failOrNot;
     private ImageLabeler labeler;
     private InputImage imageToProcess;
-    private TextToSpeech mTTS;
+    private TextToSpeech textToSpeech;
     private ImageView inputImageGalleryView;
     private int REQUEST_PICK_IMAGE = 1000;
 
@@ -100,6 +101,17 @@ public class MlActivity extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeResource(resources, drawableId);
         imageToProcess = InputImage.fromBitmap(bitmap, 0);
         runClassification(bitmap);
+        textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int i) {
+
+                // if No error is found then only it will run
+                if(i!=TextToSpeech.ERROR){
+                    // To Choose language of speech
+                    textToSpeech.setLanguage(Locale.UK);
+                }
+            }
+        });
 
 
         inputImageGalleryView = findViewById(R.id.image_trash);
@@ -178,9 +190,9 @@ public class MlActivity extends AppCompatActivity {
     }
 
     public void speak(View view) {
-        mTTS.setPitch(0.5f); //quality of sound
-        mTTS.setSpeechRate(0.5f); //speed of sound
-        mTTS.speak(outputTextView.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
+        textToSpeech.setPitch(0.5f); //quality of sound
+        textToSpeech.setSpeechRate(0.5f); //speed of sound
+        textToSpeech.speak(outputTextView.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
     }
 
     public void logout() {
