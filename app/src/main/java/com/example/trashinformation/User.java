@@ -14,6 +14,7 @@ public class User {
         this.score = score;
 
     }
+
     public User(){
     }
 
@@ -31,5 +32,8 @@ public class User {
 
     public void setName(String name){
         this.name = name;
+    }
+    public void incrementScore() {
+        score++;
     }
 }

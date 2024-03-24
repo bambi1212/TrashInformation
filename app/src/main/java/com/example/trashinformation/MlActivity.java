@@ -73,7 +73,6 @@ public class MlActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ml);
         initializeComponents();
-        displayUserNameFromFirebase();
         mAuth = FirebaseAuth.getInstance();
         checkSdkGallery();
     }
@@ -136,30 +135,7 @@ public class MlActivity extends AppCompatActivity {
         return true;
     }
 
-    private void displayUserNameFromFirebase() {
-        TextView name = findViewById(R.id.userNameDisplay);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("users");
-
-        //final ArrayList<User>users = new ArrayList<>();
-
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot Snapshot) {
-                for(DataSnapshot dataSnapshot:Snapshot.getChildren()){
-                    User current = dataSnapshot.getValue(User.class);
-                    name.setText("name is : " + current.getName());
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
-    }
 
     private void checkSdkGallery() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -196,6 +172,7 @@ public class MlActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                         e.printStackTrace();
                         failOrNot.setText("fail :(");
+                        incrementUserScore(); //need to be in on succses
                     }
                 });
     }
@@ -286,5 +263,28 @@ public class MlActivity extends AppCompatActivity {
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(MlActivity.this, ScoreBoard.class));
 
+    }
+    public void incrementUserScore() {
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference userRef = database.getReference("users/" + FirebaseAuth.getInstance().getUid());
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    User user = dataSnapshot.getValue(User.class);
+                    user.incrementScore();
+                    // Update the score in the database
+                    userRef.setValue(user);
+                } else {
+                    // Handle the case where the user's data doesn't exist
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle potential errors
+            }
+        });
     }
 }
