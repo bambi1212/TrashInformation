@@ -96,19 +96,13 @@
         android:id="@+id/mButtonSpeak"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="267dp"
-        android:layout_marginTop="581dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginBottom="30dp"
-        android:onClick="speak"
         android:text="Speak"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@id/gallary"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp" />
 
-    <!-- Button for picking image from gallery -->
     <Button
         android:id="@+id/gallary"
         android:layout_width="wrap_content"
@@ -116,11 +110,11 @@
         android:text="Pick Image"
         android:textColor="@color/black"
         android:onClick="onPickImage"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image_trash"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/camera"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp" />
 
-    <!-- Button for starting camera -->
     <Button
         android:id="@+id/camera"
         android:layout_width="wrap_content"
@@ -128,9 +122,10 @@
         android:text="Camera"
         android:textColor="@color/black"
         android:onClick="onStartCamera"
-        app:layout_constraintStart_toEndOf="@id/gallary"
-        app:layout_constraintTop_toTopOf="@id/gallary"
-        android:layout_marginStart="8dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp" />
 
     <!-- UserName Display -->
 
