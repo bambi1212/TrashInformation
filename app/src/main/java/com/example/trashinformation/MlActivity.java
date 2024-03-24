@@ -13,6 +13,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -80,6 +83,7 @@ public class MlActivity extends AppCompatActivity {
     }
 
 
+
     private void initializeComponents() {
         outputTextView = findViewById(R.id.textViewOutput);
         failOrNot = findViewById(R.id.onsuccess);
@@ -106,6 +110,24 @@ public class MlActivity extends AppCompatActivity {
         inputImageGalleryView = findViewById(R.id.image_trash);
         inputImageGalleryView.setImageBitmap(imageToProcess.getBitmapInternal());
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.score)
+            movetoscoreboard();
+
+        return true;
     }
 
     private void displayUserNameFromFirebase() {
@@ -254,7 +276,7 @@ public class MlActivity extends AppCompatActivity {
         return bitmap;
     }
 
-    public void movetoscoreboard(View v) {
+    public void movetoscoreboard() {
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(MlActivity.this, ScoreBoard.class));
 

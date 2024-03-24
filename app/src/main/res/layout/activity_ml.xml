@@ -9,6 +9,19 @@
     tools:context=".MlActivity">
 
 
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar"
+        android:background="@color/white"
+        app:title="Trash Information"
+        app:titleMarginStart="30dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+
     <!-- Buttons -->
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -22,17 +35,19 @@
 
         <Button
             android:id="@+id/movetoscore"
-            android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="1dp"
-            android:layout_marginEnd="320dp"
-            android:layout_marginBottom="102dp"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="418dp"
+            android:layout_marginEnd="294dp"
+            android:layout_marginBottom="169dp"
             android:onClick="movetoscoreboard"
-            android:text="movetoscore" />
+            android:text="movetoscore"
+            android:textColor="@color/black" />
 
     </RelativeLayout>
 
