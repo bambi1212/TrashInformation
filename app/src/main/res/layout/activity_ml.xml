@@ -18,19 +18,15 @@
         android:alpha="0.7"
         android:background="@color/my_primary"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        tools:layout_editor_absoluteY="0dp"/>
 
 
-
-
-    </RelativeLayout>
-
-
+    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/my_primary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:title="Trash Information"
         app:titleMarginStart="30dp"
@@ -38,6 +34,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Rest of your layout components -->
 
     <!-- TextViews -->
     <TextView
