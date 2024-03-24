@@ -124,8 +124,14 @@ public class MlActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.score)
+        if(id == R.id.score) {
             movetoscoreboard();
+        }else if(id == R.id.log_out){
+            logout();
+        }
+
+
+
 
         return true;
     }
@@ -200,7 +206,7 @@ public class MlActivity extends AppCompatActivity {
         mTTS.speak(outputTextView.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
     }
 
-    public void logout(View v) {
+    public void logout() {
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(MlActivity.this, LoginActivity.class));
         finish();
