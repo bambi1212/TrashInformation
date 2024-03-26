@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,7 +39,17 @@ import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.label.ImageLabel;
 import com.google.mlkit.vision.label.ImageLabeler;
 import com.google.mlkit.vision.label.ImageLabeling;
-import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions;
+
+//no need for now
+//import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions;
+
+
+//usless imports for usless google kit
+import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.label.ImageLabel;
+import com.google.mlkit.vision.label.ImageLabeler;
+import com.google.mlkit.vision.label.ImageLabeling;
+import com.google.mlkit.vision.label.defaults.ImageLabelerOptions;
 
 
 import java.io.File;
@@ -72,6 +81,8 @@ public class MlActivity extends AppCompatActivity {
 
     private File photoFile;
 
+    private ImageLabeler imageUslessLabeler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,8 +101,14 @@ public class MlActivity extends AppCompatActivity {
         TextTimer = findViewById(R.id.timer);
 
 
-        startCountdownTimer();
 
+         imageUslessLabeler = ImageLabeling.getClient(new ImageLabelerOptions.Builder()
+                .setConfidenceThreshold(0.7f)
+                .build());
+
+        //startCountdownTimer();
+
+        /*
         LocalModel localModel = new LocalModel.Builder()
                 .setAssetFilePath("WasteClassificationModel.tflite")
                 .build();
@@ -103,11 +120,13 @@ public class MlActivity extends AppCompatActivity {
                         .build();
         labeler = ImageLabeling.getClient(customImageLabelerOptions);
 
+         */
+
         Resources resources = getResources();
         int drawableId = R.drawable.juice_image;
         Bitmap bitmap = BitmapFactory.decodeResource(resources, drawableId);
         imageToProcess = InputImage.fromBitmap(bitmap, 0);
-        runClassification(bitmap);
+       // runClassification(bitmap);
         textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int i) {
@@ -164,6 +183,43 @@ public class MlActivity extends AppCompatActivity {
     }
 
     public void runClassification(Bitmap bitmap) {
+            InputImage inputImage = InputImage.fromBitmap(bitmap, 0);
+
+
+        imageUslessLabeler.process(inputImage).addOnSuccessListener(new OnSuccessListener<List<ImageLabel>>() {
+                @Override
+                public void onSuccess(@NonNull List<ImageLabel> imageLabels) {
+                    if(imageLabels.size() > 0){
+                        StringBuilder builder = new StringBuilder();
+                        for(ImageLabel label: imageLabels) {
+                            if (label != null) {
+                                builder.append(label.getText())
+                                        .append(" ; ")
+                                        .append(label.getConfidence()) //the propability its true
+                                        .append("\n");
+
+                            }
+                        }
+
+                        outputTextView.setText(builder.toString());
+                    }else{
+                        outputTextView.setText("could not classified");
+
+                    };
+                }
+
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+        }
+
+
+    /*
+    public void runClassification(Bitmap bitmap) {
         i++;
         Log.d("XXXXXX", String.valueOf(i));
         InputImage inputImage = InputImage.fromBitmap(bitmap, 0);
@@ -195,6 +251,8 @@ public class MlActivity extends AppCompatActivity {
                 });
         incrementUserScore(); //need to be in on succses
     }
+
+     */
 
     public void speak(View view) {
         textToSpeech.setPitch(0.5f); //quality of sound
