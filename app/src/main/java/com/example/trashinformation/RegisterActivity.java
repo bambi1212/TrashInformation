@@ -133,8 +133,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Write a message to the database
 
+    }
+
 
 
 
     }
-    }
+

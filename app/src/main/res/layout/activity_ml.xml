@@ -75,6 +75,20 @@
         android:layout_marginTop="16dp" />
 
 
+    <TextView
+        android:textColor="@color/black"
+        android:id="@+id/timer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="On Success"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/onsuccess"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp" />
+
+
     <!-- ImageView for displaying picked image -->
     <ImageView
         android:id="@+id/image_trash"
@@ -95,8 +109,8 @@
     <Button
         android:id="@+id/mButtonSpeak"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Speak"
+        android:layout_height="70dp"
+        android:background="@drawable/baseline_speaker_24"
         android:onClick="speak"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -107,8 +121,8 @@
     <Button
         android:id="@+id/gallary"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pick Image"
+        android:layout_height="70dp"
+        android:background="@drawable/baseline_gallary"
         android:textColor="@color/black"
         android:onClick="onPickImage"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -119,8 +133,8 @@
     <Button
         android:id="@+id/camera"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Camera"
+        android:layout_height="70dp"
+        android:background="@drawable/baseline_camera"
         android:textColor="@color/black"
         android:onClick="onStartCamera"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -128,7 +142,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp" />
 
-    <!-- UserName Display -->
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

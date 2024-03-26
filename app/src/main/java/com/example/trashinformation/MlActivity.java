@@ -1,14 +1,16 @@
 package com.example.trashinformation;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
@@ -16,11 +18,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +29,7 @@ import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,14 +37,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.mlkit.common.model.LocalModel;
 import com.google.mlkit.vision.common.InputImage;
-//import com.google.mlkit.vision.common.NormalizationOptions;
 import com.google.mlkit.vision.label.ImageLabel;
 import com.google.mlkit.vision.label.ImageLabeler;
 import com.google.mlkit.vision.label.ImageLabeling;
 import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions;
 
-
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,6 +63,12 @@ public class MlActivity extends AppCompatActivity {
 
     private int REQUEST_CAPTURE_IMAGE = 1001;
 
+    private TextView TextTimer;
+
+    int i=0;
+
+
+
 
     private File photoFile;
 
@@ -84,6 +87,10 @@ public class MlActivity extends AppCompatActivity {
         outputTextView = findViewById(R.id.textViewOutput);
         failOrNot = findViewById(R.id.onsuccess);
         failOrNot.setText("not success or fail");
+        TextTimer = findViewById(R.id.timer);
+
+
+        startCountdownTimer();
 
         LocalModel localModel = new LocalModel.Builder()
                 .setAssetFilePath("WasteClassificationModel.tflite")
@@ -114,6 +121,7 @@ public class MlActivity extends AppCompatActivity {
         });
 
 
+
         inputImageGalleryView = findViewById(R.id.image_trash);
         inputImageGalleryView.setImageBitmap(imageToProcess.getBitmapInternal());
 
@@ -141,9 +149,6 @@ public class MlActivity extends AppCompatActivity {
             logout();
         }
 
-
-
-
         return true;
     }
 
@@ -159,6 +164,8 @@ public class MlActivity extends AppCompatActivity {
     }
 
     public void runClassification(Bitmap bitmap) {
+        i++;
+        Log.d("XXXXXX", String.valueOf(i));
         InputImage inputImage = InputImage.fromBitmap(bitmap, 0);
 
         labeler.process(inputImage)
@@ -184,9 +191,9 @@ public class MlActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                         e.printStackTrace();
                         failOrNot.setText("fail :(");
-                        incrementUserScore(); //need to be in on succses
                     }
                 });
+        incrementUserScore(); //need to be in on succses
     }
 
     public void speak(View view) {
@@ -247,10 +254,10 @@ public class MlActivity extends AppCompatActivity {
             runClassification(bitmap);
         }else if(requestCode == REQUEST_CAPTURE_IMAGE){
                 Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                Matrix matrix = new Matrix();
-                matrix.postRotate(90);
-                Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                inputImageGalleryView.setImageBitmap(rotatedBitmap);
+                //Matrix matrix = new Matrix();
+                //matrix.postRotate(90);
+                //Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                //inputImageGalleryView.setImageBitmap(rotatedBitmap);
                 runClassification(bitmap);
         }
         }
@@ -299,4 +306,19 @@ public class MlActivity extends AppCompatActivity {
             }
         });
     }
+    private void startCountdownTimer() {
+        CountDownTimer mCountDownTimer = new CountDownTimer(43200000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                long hours = millisUntilFinished / 3600000;
+                long minutes = (millisUntilFinished % 3600000) / 60000;
+                long seconds = (millisUntilFinished % 60000) / 1000;
+                 TextTimer.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+            }
+
+            public void onFinish() {
+                TextTimer.setText("Time's up you can earn points!");
+            }
+        }.start();
+    }
 }
+
