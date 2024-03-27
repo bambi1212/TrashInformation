@@ -19,12 +19,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -60,6 +62,8 @@ public class MlActivity extends AppCompatActivity {
     private static final int REQUEST_PICK_IMAGE = 1000;
     private static final int REQUEST_CAPTURE_IMAGE = 1001;
 
+    private RelativeLayout rootLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +75,10 @@ public class MlActivity extends AppCompatActivity {
 
     private void initializeComponents() {
         startCountdownTimer();
-        outputTextView = findViewById(R.id.textViewOutput);
+        outputTextView = findViewById(R.id.text_result);
+
+         rootLayout = findViewById(R.id.root_layout); // Replace with the ID of your root layout
+
         inputImageView = findViewById(R.id.image_trash);
 
         imageLabeler = ImageLabeling.getClient(ImageLabelerOptions.DEFAULT_OPTIONS);
@@ -125,7 +132,7 @@ public class MlActivity extends AppCompatActivity {
                     for (ImageLabel label : imageLabels) {
                         builder.append(label.getText()).append(" ; ").append(label.getConfidence()).append("\n");
                     }
-                    outputTextView.setText(builder.toString());
+                    //outputTextView.setText(builder.toString());
                     suggestDisposalMethod(builder.toString());
                 } else {
                     outputTextView.setText("Could not classify.");
@@ -139,16 +146,27 @@ public class MlActivity extends AppCompatActivity {
         });
     }
 
+
+
     private void suggestDisposalMethod(String labels) {
+        StringBuilder trashbuilder = new StringBuilder();
+
+        trashbuilder.append("לזרוק ל:\n");
         if (labels.contains("plastic")) {
-            outputTextView.setText("Dispose of in the orange bin.");
-        } else if (labels.contains("glass")) {
-            outputTextView.setText("Dispose of in the purple bin.");
-        } else if (labels.contains("paper")) {
-            outputTextView.setText("Dispose of in the blue bin.");
-        } else {
-            outputTextView.setText("Dispose of in the orange bin.");
+            trashbuilder.append("הפח הכתום.\n");
         }
+        if (labels.contains("glass")) {
+            trashbuilder.append("הפח הסגול.\n");
+        }
+        if (labels.contains("paper")) {
+            trashbuilder.append("הפח הכחול.\n");
+        }
+        if (labels.contains("food")) {
+            trashbuilder.append("הפח הירוק.\n");
+        }
+
+        // Set the accumulated text to outputTextView
+        outputTextView.setText(trashbuilder.toString());
     }
 
     public void speak(View view) {
