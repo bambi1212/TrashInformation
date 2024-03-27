@@ -2,15 +2,15 @@ package com.example.trashinformation;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
+
+import android.graphics.ImageDecoder;
 import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
@@ -34,23 +34,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.mlkit.common.model.LocalModel;
-import com.google.mlkit.vision.common.InputImage;
-import com.google.mlkit.vision.label.ImageLabel;
-import com.google.mlkit.vision.label.ImageLabeler;
-import com.google.mlkit.vision.label.ImageLabeling;
-
-//no need for now
-//import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions;
-
-
-//usless imports for usless google kit
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.label.ImageLabel;
 import com.google.mlkit.vision.label.ImageLabeler;
 import com.google.mlkit.vision.label.ImageLabeling;
 import com.google.mlkit.vision.label.defaults.ImageLabelerOptions;
-
 
 import java.io.File;
 import java.io.IOException;
@@ -63,25 +51,13 @@ public class MlActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private TextView outputTextView;
-    private TextView failOrNot;
-    private ImageLabeler labeler;
-    private InputImage imageToProcess;
+    private ImageLabeler imageLabeler;
     private TextToSpeech textToSpeech;
-    private ImageView inputImageGalleryView;
-    private int REQUEST_PICK_IMAGE = 1000;
-
-    private int REQUEST_CAPTURE_IMAGE = 1001;
-
-    private TextView TextTimer;
-
-    int i=0;
-
-
-
+    private ImageView inputImageView;
 
     private File photoFile;
-
-    private ImageLabeler imageUslessLabeler;
+    private static final int REQUEST_PICK_IMAGE = 1000;
+    private static final int REQUEST_CAPTURE_IMAGE = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,86 +68,41 @@ public class MlActivity extends AppCompatActivity {
         checkSdkGallery();
     }
 
-
-
     private void initializeComponents() {
         outputTextView = findViewById(R.id.textViewOutput);
-        failOrNot = findViewById(R.id.onsuccess);
-        failOrNot.setText("not success or fail");
-        TextTimer = findViewById(R.id.timer);
+        inputImageView = findViewById(R.id.image_trash);
 
+        imageLabeler = ImageLabeling.getClient(ImageLabelerOptions.DEFAULT_OPTIONS);
 
-
-         imageUslessLabeler = ImageLabeling.getClient(new ImageLabelerOptions.Builder()
-                .setConfidenceThreshold(0.7f)
-                .build());
-
-        //startCountdownTimer();
-
-        /*
-        LocalModel localModel = new LocalModel.Builder()
-                .setAssetFilePath("WasteClassificationModel.tflite")
-                .build();
-
-        CustomImageLabelerOptions customImageLabelerOptions =
-                new CustomImageLabelerOptions.Builder(localModel)
-                        .setConfidenceThreshold(0.5f)
-                        .setMaxResultCount(5)
-                        .build();
-        labeler = ImageLabeling.getClient(customImageLabelerOptions);
-
-         */
-
-        Resources resources = getResources();
-        int drawableId = R.drawable.juice_image;
-        Bitmap bitmap = BitmapFactory.decodeResource(resources, drawableId);
-        imageToProcess = InputImage.fromBitmap(bitmap, 0);
-       // runClassification(bitmap);
         textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int i) {
-
-                // if No error is found then only it will run
-                if(i!=TextToSpeech.ERROR){
-                    // To Choose language of speech
+                if (i != TextToSpeech.ERROR) {
                     textToSpeech.setLanguage(Locale.UK);
                 }
             }
         });
 
-
-
-        inputImageGalleryView = findViewById(R.id.image_trash);
-        inputImageGalleryView.setImageBitmap(imageToProcess.getBitmapInternal());
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menumenu,menu);
+        getMenuInflater().inflate(R.menu.toolbar_menumenu, menu);
         return true;
-
-        }
-
-
-
+    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.score) {
-            movetoscoreboard();
-        }else if(id == R.id.log_out){
+        if (id == R.id.score) {
+            movetoScoreboard();
+        } else if (id == R.id.log_out) {
             logout();
         }
-
         return true;
     }
-
-
 
     private void checkSdkGallery() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -183,76 +114,40 @@ public class MlActivity extends AppCompatActivity {
     }
 
     public void runClassification(Bitmap bitmap) {
-            InputImage inputImage = InputImage.fromBitmap(bitmap, 0);
-
-
-        imageUslessLabeler.process(inputImage).addOnSuccessListener(new OnSuccessListener<List<ImageLabel>>() {
-                @Override
-                public void onSuccess(@NonNull List<ImageLabel> imageLabels) {
-                    if(imageLabels.size() > 0){
-                        StringBuilder builder = new StringBuilder();
-                        for(ImageLabel label: imageLabels) {
-                            if (label != null) {
-                                builder.append(label.getText())
-                                        .append(" ; ")
-                                        .append(label.getConfidence()) //the propability its true
-                                        .append("\n");
-
-                            }
-                        }
-
-                        outputTextView.setText(builder.toString());
-                    }else{
-                        outputTextView.setText("could not classified");
-
-                    };
-                }
-
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    e.printStackTrace();
-                }
-            });
-
-        }
-
-
-    /*
-    public void runClassification(Bitmap bitmap) {
-        i++;
-        Log.d("XXXXXX", String.valueOf(i));
-        InputImage inputImage = InputImage.fromBitmap(bitmap, 0);
-
-        labeler.process(inputImage)
-                .addOnSuccessListener(new OnSuccessListener<List<ImageLabel>>() {
-                    @Override
-                    public void onSuccess(List<ImageLabel> labels) {
-                        failOrNot.setText("Success :)");
-
-                        if (labels.size() > 0) {
-                            StringBuilder builder = new StringBuilder();
-                            for (ImageLabel label : labels) {
-                                builder.append(label.getText())
-                                        .append(" ; ")
-                                        .append("\n");
-                            }
-                            outputTextView.setText(builder.toString());
-                        } else {
-                            outputTextView.setText("could not classified");
-                        }
+        InputImage image = InputImage.fromBitmap(bitmap, 0);
+        imageLabeler.process(image).addOnSuccessListener(new OnSuccessListener<List<ImageLabel>>() {
+            @Override
+            public void onSuccess(@NonNull List<ImageLabel> imageLabels) {
+                if (imageLabels.size() > 0) {
+                    StringBuilder builder = new StringBuilder();
+                    for (ImageLabel label : imageLabels) {
+                        builder.append(label.getText()).append(" ; ").append(label.getConfidence()).append("\n");
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        e.printStackTrace();
-                        failOrNot.setText("fail :(");
-                    }
-                });
-        incrementUserScore(); //need to be in on succses
+                    outputTextView.setText(builder.toString());
+                    suggestDisposalMethod(builder.toString());
+                } else {
+                    outputTextView.setText("Could not classify.");
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
-     */
+    private void suggestDisposalMethod(String labels) {
+        if (labels.contains("plastic")) {
+            outputTextView.setText("Dispose of in the orange bin.");
+        } else if (labels.contains("glass")) {
+            outputTextView.setText("Dispose of in the purple bin.");
+        } else if (labels.contains("paper")) {
+            outputTextView.setText("Dispose of in the blue bin.");
+        } else {
+            outputTextView.setText("Dispose of in the orange bin.");
+        }
+    }
 
     public void speak(View view) {
         textToSpeech.setPitch(0.5f); //quality of sound
@@ -269,7 +164,7 @@ public class MlActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Log.d(MlActivity.class.getSimpleName(),"grant result for"+ permissions[0] +"is granted"+ grantResults[0]);
+        Log.d(MlActivity.class.getSimpleName(), "Grant result for " + permissions[0] + " is granted: " + grantResults[0]);
     }
 
     public void onPickImage(View view) {
@@ -277,6 +172,9 @@ public class MlActivity extends AppCompatActivity {
         intent.setType("image/*");
         startActivityForResult(intent, REQUEST_PICK_IMAGE);
     }
+
+
+
 
     public void onStartCamera(View view) {
         //create a file to share with camera
@@ -291,33 +189,30 @@ public class MlActivity extends AppCompatActivity {
         startActivityForResult(intent,REQUEST_CAPTURE_IMAGE);
     }
 
-    private File createPhotoFile(){
-        File photoFileDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),"Trash_Pictures");
-        if(!photoFileDir.exists()){
+
+    private File createPhotoFile() {
+        File photoFileDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Trash_Pictures");
+        if (!photoFileDir.exists()) {
             photoFileDir.mkdir();
         }
-        String FileName =  new SimpleDateFormat("yyyyMMdd_HHmm").format(new Date());
-        File file = new File(photoFileDir.getPath() + File.separator + FileName);
-        return file;
+        String FileName = new SimpleDateFormat("yyyyMMdd_HHmm").format(new Date());
+        return new File(photoFileDir.getPath() + File.separator + FileName);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK)  {
-            if( requestCode == REQUEST_PICK_IMAGE){
-            Uri uri = data.getData();
-            Bitmap bitmap = loadFromUri(uri);
-            inputImageGalleryView.setImageBitmap(bitmap);
-            runClassification(bitmap);
-        }else if(requestCode == REQUEST_CAPTURE_IMAGE){
-                Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                //Matrix matrix = new Matrix();
-                //matrix.postRotate(90);
-                //Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                //inputImageGalleryView.setImageBitmap(rotatedBitmap);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_PICK_IMAGE) {
+                Uri uri = data.getData();
+                Bitmap bitmap = loadFromUri(uri);
+                inputImageView.setImageBitmap(bitmap);
                 runClassification(bitmap);
-        }
+            } else if (requestCode == REQUEST_CAPTURE_IMAGE) {
+                Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                inputImageView.setImageBitmap(bitmap);
+                runClassification(bitmap);
+            }
         }
     }
 
@@ -325,8 +220,7 @@ public class MlActivity extends AppCompatActivity {
         Bitmap bitmap = null;
         try {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {
-                ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), uri);
-                bitmap = ImageDecoder.decodeBitmap(source);
+                bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(getContentResolver(), uri));
             } else {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
             }
@@ -336,11 +230,11 @@ public class MlActivity extends AppCompatActivity {
         return bitmap;
     }
 
-    public void movetoscoreboard() {
+    public void movetoScoreboard() {
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(MlActivity.this, ScoreBoard.class));
-
     }
+
     public void incrementUserScore() {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference userRef = database.getReference("users/" + FirebaseAuth.getInstance().getUid());
@@ -364,19 +258,22 @@ public class MlActivity extends AppCompatActivity {
             }
         });
     }
+
+    /*
     private void startCountdownTimer() {
-        CountDownTimer mCountDownTimer = new CountDownTimer(43200000, 1000) {
+        new CountDownTimer(43200000, 1000) {
             public void onTick(long millisUntilFinished) {
                 long hours = millisUntilFinished / 3600000;
                 long minutes = (millisUntilFinished % 3600000) / 60000;
                 long seconds = (millisUntilFinished % 60000) / 1000;
-                 TextTimer.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+                TextTimer.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
             }
 
             public void onFinish() {
-                TextTimer.setText("Time's up you can earn points!");
+                TextTimer.setText("Time's up! You can earn points!");
             }
         }.start();
     }
-}
 
+     */
+}
