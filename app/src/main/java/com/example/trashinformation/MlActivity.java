@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -69,6 +70,7 @@ public class MlActivity extends AppCompatActivity {
     }
 
     private void initializeComponents() {
+        startCountdownTimer();
         outputTextView = findViewById(R.id.textViewOutput);
         inputImageView = findViewById(R.id.image_trash);
 
@@ -210,10 +212,16 @@ public class MlActivity extends AppCompatActivity {
                 runClassification(bitmap);
             } else if (requestCode == REQUEST_CAPTURE_IMAGE) {
                 Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                inputImageView.setImageBitmap(bitmap);
-                runClassification(bitmap);
+                Bitmap rotatedBitmap = rotateBitmap(bitmap, 90); // Rotate by 90 degrees
+                inputImageView.setImageBitmap(rotatedBitmap);
+                runClassification(rotatedBitmap);
             }
         }
+    }
+    public Bitmap rotateBitmap(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 
     private Bitmap loadFromUri(Uri uri) {
@@ -259,8 +267,11 @@ public class MlActivity extends AppCompatActivity {
         });
     }
 
-    /*
+
     private void startCountdownTimer() {
+
+        TextView TextTimer = findViewById(R.id.timer);
+
         new CountDownTimer(43200000, 1000) {
             public void onTick(long millisUntilFinished) {
                 long hours = millisUntilFinished / 3600000;
@@ -275,5 +286,5 @@ public class MlActivity extends AppCompatActivity {
         }.start();
     }
 
-     */
+
 }
