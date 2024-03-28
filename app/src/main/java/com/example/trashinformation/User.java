@@ -1,8 +1,12 @@
 package com.example.trashinformation;
 
+import android.os.CountDownTimer;
+
 public class User {
     private String name;
     private int score;
+
+    private CountDownTimer timer;
 
     public User(String name){
         this.name = name;

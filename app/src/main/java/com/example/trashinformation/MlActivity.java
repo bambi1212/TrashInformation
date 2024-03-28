@@ -132,6 +132,7 @@ public class MlActivity extends AppCompatActivity {
                     for (ImageLabel label : imageLabels) {
                         builder.append(label.getText()).append(" ; ").append(label.getConfidence()).append("\n");
                     }
+                    incrementUserScore(); //get points for therowing
                     //outputTextView.setText(builder.toString());
                     suggestDisposalMethod(builder.toString());
                 } else {
@@ -149,25 +150,26 @@ public class MlActivity extends AppCompatActivity {
 
 
     private void suggestDisposalMethod(String labels) {
-        StringBuilder trashbuilder = new StringBuilder();
+        StringBuilder trashBuilder = new StringBuilder();
 
-        trashbuilder.append("לזרוק ל:\n");
+        trashBuilder.append("Dispose in:\n");
         if (labels.contains("plastic")) {
-            trashbuilder.append("הפח הכתום.\n");
+            trashBuilder.append("Orange bin.\n");
         }
         if (labels.contains("glass")) {
-            trashbuilder.append("הפח הסגול.\n");
+            trashBuilder.append("Purple bin.\n");
         }
         if (labels.contains("paper")) {
-            trashbuilder.append("הפח הכחול.\n");
+            trashBuilder.append("Blue bin.\n");
         }
         if (labels.contains("food")) {
-            trashbuilder.append("הפח הירוק.\n");
+            trashBuilder.append("Green bin.\n");
         }
 
         // Set the accumulated text to outputTextView
-        outputTextView.setText(trashbuilder.toString());
+        outputTextView.setText(trashBuilder.toString());
     }
+
 
     public void speak(View view) {
         textToSpeech.setPitch(0.5f); //quality of sound
@@ -183,6 +185,7 @@ public class MlActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        // Call the superclass implementation of onRequestPermissionsResult
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         Log.d(MlActivity.class.getSimpleName(), "Grant result for " + permissions[0] + " is granted: " + grantResults[0]);
     }
