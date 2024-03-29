@@ -26,7 +26,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -52,8 +51,8 @@ import java.util.Locale;
 
 public class MlActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
-    private TextView outputTextView;
+    //private FirebaseAuth mAuth;
+    private TextView outputTextresult;
     private ImageLabeler imageLabeler;
     private TextToSpeech textToSpeech;
     private ImageView inputImageView;
@@ -69,13 +68,13 @@ public class MlActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ml);
         initializeComponents();
-        mAuth = FirebaseAuth.getInstance();
+        //mAuth = FirebaseAuth.getInstance();
         checkSdkGallery();
     }
 
     private void initializeComponents() {
         startCountdownTimer();
-        outputTextView = findViewById(R.id.text_result);
+        outputTextresult = findViewById(R.id.text_result);
 
          rootLayout = findViewById(R.id.root_layout); // Replace with the ID of your root layout
 
@@ -136,7 +135,7 @@ public class MlActivity extends AppCompatActivity {
                     //outputTextView.setText(builder.toString());
                     suggestDisposalMethod(builder.toString());
                 } else {
-                    outputTextView.setText("Could not classify.");
+                    outputTextresult.setText("Could not classify.");
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -167,14 +166,14 @@ public class MlActivity extends AppCompatActivity {
         }
 
         // Set the accumulated text to outputTextView
-        outputTextView.setText(trashBuilder.toString());
+        outputTextresult.setText(trashBuilder.toString());
     }
 
 
     public void speak(View view) {
         textToSpeech.setPitch(0.5f); //quality of sound
         textToSpeech.setSpeechRate(0.5f); //speed of sound
-        textToSpeech.speak(outputTextView.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
+        textToSpeech.speak(outputTextresult.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
     }
 
     public void logout() {

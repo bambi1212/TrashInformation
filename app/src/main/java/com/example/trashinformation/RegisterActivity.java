@@ -17,6 +17,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -34,7 +35,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     //ActivityReadDataBinding a;
 
+    EditText passwordText;
+
     EditText name;
+
+    EditText emailText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
         EdgeToEdge.enable(this); //for noti maybe need to check
         setContentView(R.layout.activity_register);
         mAuth = FirebaseAuth.getInstance();
-        name = findViewById (R.id.choseNickName_editText);
+        name = findViewById(R.id.choseNickName_editText);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(RegisterActivity.this, android.Manifest.permission.POST_NOTIFICATIONS)
@@ -54,8 +59,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void registerAccount(View v) {
-        EditText emailText = findViewById(R.id.edittext_email_login);
-        EditText passwordText = findViewById(R.id. edittext_password_reg);
+         emailText = findViewById(R.id.edittext_email_login);
+         passwordText = findViewById(R.id. edittext_password_reg);
 
 
         if(name.getText().toString().isEmpty()) {
