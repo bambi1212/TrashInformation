@@ -149,12 +149,12 @@ public class MlActivity extends AppCompatActivity {
 
 
     private void suggestDisposalMethod(String labels) {
-        String disposalMethods = labels.toString()+"Dispose in:";
+        String disposalMethods = /*labels.toString() + */"Dispose in:";
 
         int i=0;
         // Check if the labels contain specific materials and suggest the appropriate disposal method
         if (labels.contains("Plastic") || labels.contains("Cup") || labels.contains("Plastic Bottle")
-                || labels.contains("bag")) {
+                || labels.contains("Bag")) {
             i=1;
             disposalMethods += "Orange bin,"; // Option 1: Dispose plastic, cup, plastic bottle, or bag in the orange bin.
         }
@@ -175,6 +175,10 @@ public class MlActivity extends AppCompatActivity {
 
             disposalMethods += "Green bin,"; // Option 4: Dispose food waste or organic waste in the green bin.
         }
+
+
+        disposalMethods = disposalMethods.substring(0, disposalMethods.length() - 1);
+        disposalMethods += ".";
 
         // Set the accumulated text to outputTextView
         outputTextresult.setText(disposalMethods);
