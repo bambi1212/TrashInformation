@@ -51,18 +51,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp" />
 
-    <TextView
-        android:id="@+id/image_exist"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Image Exist"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_result"
-        android:layout_marginStart="16dp"
-        android:textColor="@color/black"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp" />
+
 
     <TextView
         android:id="@+id/onsuccess"
@@ -71,7 +60,7 @@
         android:text="On Success"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image_exist"
+        app:layout_constraintTop_toBottomOf="@id/timer"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp" />
@@ -92,19 +81,7 @@
 
 
     <!-- ImageView for displaying picked image -->
-    <ImageView
-        android:id="@+id/image_trash"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:src="@drawable/juice_image"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/onsuccess"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp" />
+
 
     <!-- Speak Button -->
 

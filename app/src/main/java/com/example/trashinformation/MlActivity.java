@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -57,6 +59,8 @@ public class MlActivity extends AppCompatActivity {
     private TextToSpeech textToSpeech;
     private ImageView inputImageView;
 
+    private ConstraintLayout constraintLayout;
+
     private File photoFile;
     private static final int REQUEST_PICK_IMAGE = 1000;
     private static final int REQUEST_CAPTURE_IMAGE = 1001;
@@ -73,12 +77,16 @@ public class MlActivity extends AppCompatActivity {
     }
 
     private void initializeComponents() {
+
+
+        // Set the background bitmap
+
         startCountdownTimer();
         outputTextresult = findViewById(R.id.text_result);
 
          rootLayout = findViewById(R.id.root_layout); // Replace with the ID of your root layout
 
-        inputImageView = findViewById(R.id.image_trash);
+        //inputImageView = findViewById(R.id.image_trash);
 
         imageLabeler = ImageLabeling.getClient(ImageLabelerOptions.DEFAULT_OPTIONS);
 
@@ -122,6 +130,8 @@ public class MlActivity extends AppCompatActivity {
     }
 
     public void runClassification(Bitmap bitmap) {
+        ConstraintLayout constraintLayout = findViewById(R.id.main); // Replace R.id.main with your ConstraintLayout id
+        constraintLayout.setBackground(new BitmapDrawable(getResources(), bitmap));
         InputImage image = InputImage.fromBitmap(bitmap, 0);
         imageLabeler.process(image).addOnSuccessListener(new OnSuccessListener<List<ImageLabel>>() {
             @Override
@@ -244,12 +254,12 @@ public class MlActivity extends AppCompatActivity {
             if (requestCode == REQUEST_PICK_IMAGE) {
                 Uri uri = data.getData();
                 Bitmap bitmap = loadFromUri(uri);
-                inputImageView.setImageBitmap(bitmap);
+              //  inputImageView.setImageBitmap(bitmap);
                 runClassification(bitmap);
             } else if (requestCode == REQUEST_CAPTURE_IMAGE) {
                 Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                 Bitmap rotatedBitmap = rotateBitmap(bitmap, 90); // Rotate by 90 degrees
-                inputImageView.setImageBitmap(rotatedBitmap);
+                //inputImageView.setImageBitmap(rotatedBitmap);
                 runClassification(rotatedBitmap);
             }
         }
