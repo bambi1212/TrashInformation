@@ -48,7 +48,7 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.engage.core)
     //implementation(libs.image.labeling.default.common)
-   // testImplementation(libs.junit)
+    // testImplementation(libs.junit)
     //androidTestImplementation(libs.ext.junit)
     //androidTestImplementation(libs.espresso.core)
 
@@ -62,12 +62,10 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     //ml
-   // implementation("com.google.mlkit:image-labeling-custom:17.0.2")
+    // implementation("com.google.mlkit:image-labeling-custom:17.0.2")
 
     //google ml
     implementation("com.google.mlkit:image-labeling:17.0.8")
-
-
 
 
 

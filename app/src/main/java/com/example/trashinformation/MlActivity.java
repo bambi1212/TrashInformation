@@ -149,25 +149,37 @@ public class MlActivity extends AppCompatActivity {
 
 
     private void suggestDisposalMethod(String labels) {
-        StringBuilder trashBuilder = new StringBuilder();
+        String disposalMethods = labels.toString()+"Dispose in:";
 
-        trashBuilder.append("Dispose in:\n");
-        if (labels.contains("plastic")) {
-            trashBuilder.append("Orange bin.\n");
+        int i=0;
+        // Check if the labels contain specific materials and suggest the appropriate disposal method
+        if (labels.contains("Plastic") || labels.contains("Cup") || labels.contains("Plastic Bottle")
+                || labels.contains("bag")) {
+            i=1;
+            disposalMethods += "Orange bin,"; // Option 1: Dispose plastic, cup, plastic bottle, or bag in the orange bin.
         }
-        if (labels.contains("glass")) {
-            trashBuilder.append("Purple bin.\n");
+        if (labels.contains("Glass") || labels.contains("Wine Bottle") || labels.contains("Jar")) {
+            i=1;
+            disposalMethods += "Purple bin,"; // Option 2: Dispose glass, wine bottle, or jar in the purple bin.
         }
-        if (labels.contains("paper")) {
-            trashBuilder.append("Blue bin.\n");
+        if (labels.contains("Paper") || labels.contains("Cardboard") || labels.contains("Newspaper")) {
+            i=1;
+            disposalMethods += "Blue bin,"; // Option 3: Dispose paper, cardboard, or newspaper in the blue bin.
         }
-        if (labels.contains("food")) {
-            trashBuilder.append("Green bin.\n");
+
+        if (labels.contains("Metal") ) {
+            i=1;
+            disposalMethods += "gray bin,"; // Option 4: Dispose food waste or organic waste in the green bin.
+        }
+        if (labels.contains("Food") || labels.contains("organic")||i==0) {
+
+            disposalMethods += "Green bin,"; // Option 4: Dispose food waste or organic waste in the green bin.
         }
 
         // Set the accumulated text to outputTextView
-        outputTextresult.setText(trashBuilder.toString());
+        outputTextresult.setText(disposalMethods);
     }
+
 
 
     public void speak(View view) {
