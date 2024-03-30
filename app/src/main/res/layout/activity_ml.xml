@@ -67,29 +67,25 @@
 
 
 
-    <!-- ImageView for displaying picked image -->
-
 
     <!-- Speak Button -->
 
     <Button
         android:id="@+id/mButtonSpeak"
-        android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:background="@drawable/baseline_speaker_24"
-        android:onClick="speak"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/gallary"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp" />
+        android:background="@drawable/volume"
+        android:onClick="speak"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/gallary" />
 
     <Button
         android:id="@+id/gallary"
         android:layout_width="wrap_content"
         android:layout_height="70dp"
         android:background="@drawable/baseline_gallary"
-        android:textColor="@color/black"
         android:onClick="onPickImage"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/camera"
@@ -101,7 +97,6 @@
         android:layout_width="wrap_content"
         android:layout_height="70dp"
         android:background="@drawable/baseline_camera"
-        android:textColor="@color/black"
         android:onClick="onStartCamera"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
