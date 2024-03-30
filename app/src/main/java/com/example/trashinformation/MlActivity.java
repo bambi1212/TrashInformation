@@ -137,11 +137,12 @@ public class MlActivity extends AppCompatActivity {
             @Override
             public void onSuccess(@NonNull List<ImageLabel> imageLabels) {
                 if (imageLabels.size() > 0) {
+                    increaseScore();
                     StringBuilder builder = new StringBuilder();
                     for (ImageLabel label : imageLabels) {
                         builder.append(label.getText()).append(" ; ").append(label.getConfidence()).append("\n");
                     }
-                    incrementUserScore(); //get points for therowing
+                     //get points for therowing
                     //outputTextView.setText(builder.toString());
                     suggestDisposalMethod(builder.toString());
                 } else {
@@ -197,8 +198,8 @@ public class MlActivity extends AppCompatActivity {
 
 
     public void speak(View view) {
-        textToSpeech.setPitch(0.5f); //quality of sound
-        textToSpeech.setSpeechRate(0.5f); //speed of sound
+        textToSpeech.setPitch(1f); //quality of sound
+        textToSpeech.setSpeechRate(1f); //speed of sound
         textToSpeech.speak(outputTextresult.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
     }
 
@@ -289,7 +290,7 @@ public class MlActivity extends AppCompatActivity {
         startActivity(new Intent(MlActivity.this, ScoreBoard.class));
     }
 
-    public void incrementUserScore() {
+    public void increaseScore() {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference userRef = database.getReference("users/" + FirebaseAuth.getInstance().getUid());
 

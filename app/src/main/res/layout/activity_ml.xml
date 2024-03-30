@@ -19,7 +19,9 @@
         android:alpha="0.7"
         android:background="@color/my_primary"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp"/>
+        tools:layout_editor_absoluteY="0dp">
+
+    </RelativeLayout>
 
 
     <!-- Toolbar -->
@@ -68,18 +70,20 @@
 
 
 
+
     <!-- Speak Button -->
 
     <Button
-        android:id="@+id/mButtonSpeak"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:id="@+id/mButtonSpeak" 
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/volume"
         android:onClick="speak"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/gallary" />
+        app:layout_constraintBottom_toBottomOf="@id/text_result"
+        app:layout_constraintEnd_toEndOf="@id/text_result" />
+
 
     <Button
         android:id="@+id/gallary"
@@ -88,9 +92,11 @@
         android:background="@drawable/baseline_gallary"
         android:onClick="onPickImage"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/camera"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp" />
+        android:layout_marginEnd="16dp" />
+
 
     <Button
         android:id="@+id/camera"
@@ -100,10 +106,8 @@
         android:onClick="onStartCamera"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp" />
-
-
-
+        android:layout_marginStart="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
