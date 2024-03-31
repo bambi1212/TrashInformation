@@ -1,6 +1,8 @@
 package com.example.trashinformation;
 
 import android.content.Intent;
+import android.graphics.Color;
+
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -161,38 +163,67 @@ public class MlActivity extends AppCompatActivity {
 
     private void suggestDisposalMethod(String labels) {
         String disposalMethods = /*labels.toString() + */"Dispose in:";
+        int color = Color.GREEN;
 
         int i=0;
         // Check if the labels contain specific materials and suggest the appropriate disposal method
         if (labels.contains("Plastic") || labels.contains("Cup") || labels.contains("Plastic Bottle")
                 || labels.contains("Bag")) {
-            i=1;
+            i++;
             disposalMethods += "Orange bin,"; // Option 1: Dispose plastic, cup, plastic bottle, or bag in the orange bin.
+            color = Color.parseColor("#FFA500"); // Set color to orange
         }
         if (labels.contains("Glass") || labels.contains("Wine Bottle") || labels.contains("Jar")) {
-            i=1;
+            i++;
             disposalMethods += "Purple bin,"; // Option 2: Dispose glass, wine bottle, or jar in the purple bin.
+            color = Color.parseColor("#800080"); // Set color to purple
         }
         if (labels.contains("Paper") || labels.contains("Cardboard") || labels.contains("Newspaper")) {
-            i=1;
+            i++;
             disposalMethods += "Blue bin,"; // Option 3: Dispose paper, cardboard, or newspaper in the blue bin.
+            color = Color.BLUE; // Set color to blue
         }
 
         if (labels.contains("Metal") ) {
-            i=1;
+            i++;
             disposalMethods += "gray bin,"; // Option 4: Dispose food waste or organic waste in the green bin.
+            color = Color.GRAY; // Set color to gray
+
         }
         if (labels.contains("Food") || labels.contains("organic")||i==0) {
-
+            i++;
             disposalMethods += "Green bin,"; // Option 4: Dispose food waste or organic waste in the green bin.
-        }
 
+        }
+        if(i==1){
+            rootLayout.setBackgroundColor(lightenColor(color,2f));
+        } else rootLayout.setBackgroundColor(Color.TRANSPARENT);
 
         disposalMethods = disposalMethods.substring(0, disposalMethods.length() - 1);
         disposalMethods += ".";
-
         // Set the accumulated text to outputTextView
         outputTextresult.setText(disposalMethods);
+    }
+
+
+    private int lightenColor(int color, float factor) {
+        // Extract the RGB components of the color
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+
+        // Scale each RGB component by the factor to lighten the color
+        red = (int) (red * (1 + factor));
+        green = (int) (green * (1 + factor));
+        blue = (int) (blue * (1 + factor));
+
+        // Clip the RGB values to the range [0, 255]
+        red = Math.min(red, 255);
+        green = Math.min(green, 255);
+        blue = Math.min(blue, 255);
+
+        // Return the new color
+        return Color.rgb(red, green, blue);
     }
 
 
