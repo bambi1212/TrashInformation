@@ -18,10 +18,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         this.users = users;
     }
 
-    @NonNull
-    @Override
+
+    @NonNull //  parameters and the returned value cannot be null.
+    @Override // Indicates that the method is being overridden from a superclass.
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflates the layout for each item in the RecyclerView.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_user, parent, false);
+        // Returns a new instance of UserViewHolder with the inflated view.
         return new UserViewHolder(view);
     }
 
