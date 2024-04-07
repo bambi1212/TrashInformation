@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -23,6 +24,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,6 +34,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -81,6 +84,8 @@ public class MlActivity extends AppCompatActivity {
     }
 
     private void initializeComponents() {
+
+
 
 
         // Set the background bitmap
@@ -368,7 +373,7 @@ public class MlActivity extends AppCompatActivity {
                 long hours = millisUntilFinished / 3600000;
                 long minutes = (millisUntilFinished % 3600000) / 60000;
                 long seconds = (millisUntilFinished % 60000) / 1000;
-                TextTimer.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+                TextTimer.setText("time until u can get another point"+String.format("%02d:%02d:%02d", hours, minutes, seconds));
             }
 
             public void onFinish() {
