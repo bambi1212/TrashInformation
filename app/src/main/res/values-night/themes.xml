@@ -15,5 +15,7 @@
 
         <item name="android:statusBarColor">@color/my_primary</item>
 
+
+
     </style>
 </resources>

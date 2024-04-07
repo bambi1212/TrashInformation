@@ -5,12 +5,13 @@
     <item
         android:id="@+id/score"
         android:icon="@drawable/baseline_emoji_events_24"
-        android:title="score" />
+        android:title="score"
+        />
 
     <item
         android:id="@+id/log_out"
         android:icon="@drawable/baseline_logout_24"
-        android:title="Log Out"/>
+        android:title="Log Out" />
 
 
 </menu>

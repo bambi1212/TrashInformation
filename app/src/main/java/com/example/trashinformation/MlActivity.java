@@ -17,6 +17,8 @@ import android.os.Environment;
 import android.graphics.ImageDecoder;
 import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -105,15 +107,26 @@ public class MlActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
+    //change the menu item color and make it appear
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menumenu, menu);
+
+        //change color
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem menuItem = menu.getItem(i);
+            SpannableString spannableTitle = new SpannableString(menuItem.getTitle());
+            spannableTitle.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.white)), 0, spannableTitle.length(), 0);
+            menuItem.setTitle(spannableTitle);
+        }
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
+
         if (id == R.id.score) {
             movetoScoreboard();
         } else if (id == R.id.log_out) {
