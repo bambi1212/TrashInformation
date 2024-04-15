@@ -29,6 +29,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -65,8 +70,22 @@ public class MlActivity extends AppCompatActivity {
     private ImageLabeler imageLabeler;
     private TextToSpeech textToSpeech;
     private ImageView inputImageView;
+    ActivityResultLauncher<Intent> activityResultLauncher =
+            registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    new ActivityResultCallback<ActivityResult>() {
+                        @Override
+                        public void onActivityResult(ActivityResult activityResult) {
+                            int result=activityResult.getResultCode();
+                            Intent data = activityResult.getData();
+                        }
+                    }
+
+            );
 
     private ConstraintLayout constraintLayout;
+
+
 
     private File photoFile;
     private static final int REQUEST_PICK_IMAGE = 1000;
@@ -268,8 +287,11 @@ public class MlActivity extends AppCompatActivity {
     public void onPickImage(View view) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
-        startActivityForResult(intent, REQUEST_PICK_IMAGE);
+        //startActivityForResult(intent, REQUEST_PICK_IMAGE);
+        activityResultLauncher.launch(intent);
     }
+
+
 
 
 
@@ -341,7 +363,7 @@ public class MlActivity extends AppCompatActivity {
 
     public void increaseScore() {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference userRef = database.getReference("users/" + FirebaseAuth.getInstance().getUid());
+        final DatabaseReference userRef = database.getReference("cities/" + FirebaseAuth.getInstance().getUid());
 
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
