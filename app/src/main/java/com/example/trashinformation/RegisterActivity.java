@@ -18,6 +18,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -130,10 +131,18 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void setUser(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
+        Log.d("arrivesetUser","1");
+
         DatabaseReference myRef= database.getReference("users/"+mAuth.getInstance().getUid());
+        Log.d("arrivesetUser","2");
         User user =new User(name.getText().toString());
-            //myRef.setValue(name.getText().toString());
+        Log.d("arrivesetUser","3");
+
+        //myRef.setValue(name.getText().toString());
+        Log.d("arrivesetUser","4");
+
         myRef.setValue(user);
+        Log.d("arrivesetUser","5");
 
 
         // Write a message to the database

@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "524765177458",
+    "firebase_url": "https://trashinformation-96d96-default-rtdb.firebaseio.com",
+    "project_id": "trashinformation-96d96",
+    "storage_bucket": "trashinformation-96d96.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:524765177458:android:b121c5fc724c5f769ec4eb",
+        "android_client_info": {
+          "package_name": "com.example.trashinformation"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_xn9vN01HlytOL2nhmD-O5cBACfovbO4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

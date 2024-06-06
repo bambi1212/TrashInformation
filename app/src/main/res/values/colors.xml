@@ -6,8 +6,6 @@
     <color name="Green">#00FF00</color>
 
 
-    <color name="Green">#00FF00</color>
-
     <color name="my_primary">#5E35B1</color>
     <color name="my_secondary">#673AB7</color> <!-- Removed the extra '>' character -->
 </resources>

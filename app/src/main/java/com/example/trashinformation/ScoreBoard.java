@@ -45,12 +45,16 @@ public class ScoreBoard extends AppCompatActivity {
         final UserAdapter adapter = new UserAdapter(users);
         recyclerView.setAdapter(adapter);
         Query myQuery = database.getReference("users").orderByChild("score").limitToLast(5);
+        Log.d("arriveToRead","0");
 
         myQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 users.clear();
+                Log.d("arriveToRead","1");
+
                 for (DataSnapshot Usersnapshot : snapshot.getChildren()) {
+                    Log.d("arriveToRead","2");
                     User current = Usersnapshot.getValue(User.class);
                     users.add(0, current);
                     //if(current!=null)
