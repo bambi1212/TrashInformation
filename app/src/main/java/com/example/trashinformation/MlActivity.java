@@ -65,11 +65,10 @@ import java.util.Locale;
 
 public class MlActivity extends AppCompatActivity {
 
-    //private FirebaseAuth mAuth;
+
     private TextView outputTextresult;
     private ImageLabeler imageLabeler;
     private TextToSpeech textToSpeech;
-    private ImageView inputImageView;
     ActivityResultLauncher<Intent> activityResultLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
@@ -83,7 +82,6 @@ public class MlActivity extends AppCompatActivity {
 
             );
 
-    private ConstraintLayout constraintLayout;
 
 
 
@@ -363,7 +361,7 @@ public class MlActivity extends AppCompatActivity {
 
     public void increaseScore() {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference userRef = database.getReference("cities/" + FirebaseAuth.getInstance().getUid());
+        final DatabaseReference userRef = database.getReference("users/" + FirebaseAuth.getInstance().getUid());
 
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
